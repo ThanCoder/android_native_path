@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print, unused_local_variable
 
+import 'dart:io';
+
 import 'package:android_native_path/android_native_path.dart';
 import 'package:flutter/material.dart';
 
@@ -20,8 +22,9 @@ class _MyAppState extends State<MyApp> {
 
     final path = await pkg.nativeLibraryDir;
     final files = await pkg.nativeLibraries;
-    final file = await pkg.getNativeLib('lib name.so');
-    print(path);
+    final dir = Directory(path!);
+    // final file = await pkg.getNativeLib('lib name.so');
+    print('[Dev]: ${dir.listSync()}');
   }
 
   @override
