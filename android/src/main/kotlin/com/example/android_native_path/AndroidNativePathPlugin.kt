@@ -20,23 +20,65 @@ class AndroidNativePathPlugin: FlutterPlugin, MethodCallHandler {
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        if (call.method == "getNativeLibraryDir") {
-            // Android applicationInfo.nativeLibraryDir ကို တိုက်ရိုက်ယူခြင်း
-            val libDir = context.applicationInfo.nativeLibraryDir
-            result.success(libDir)
-        } else if (call.method == "getNativeLibrariesList") {
-            val nativeDir = File(context.applicationInfo.nativeLibraryDir)
-            val libraries = nativeDir.listFiles { file ->
-            file.isFile && file.name.endsWith(".so")
-            }?.map { it.name } ?: emptyList()
-            
-            result.success(libraries)   
-        } else {
-            result.notImplemented()
+    when (call.method) {
+        "getNativeLibraryDir" -> {
+            result.success(context.applicationInfo.nativeLibraryDir)
         }
+
+        "getNativeLibraryPath" -> {
+            val name = call.argument<String>("name")
+
+            if (name == null) {
+                result.error(
+                    "INVALID_ARGUMENT",
+                    "Library name is required",
+                    null
+                )
+                return
+            }
+
+            val fileName = if (name.endsWith(".so")) {
+                name
+            } else {
+                "lib$name.so"
+            }
+
+            val file = File(
+                context.applicationInfo.nativeLibraryDir,
+                fileName
+            )
+
+            if (file.isFile) {
+                result.success(file.absolutePath)
+            } else {
+                result.error(
+                    "NOT_FOUND",
+                    "Native library not found: $fileName",
+                    null
+                )
+            }
+        }
+
+        "getNativeLibrariesList" -> {
+            val nativeDir = File(context.applicationInfo.nativeLibraryDir)
+
+            val libraries = nativeDir
+                .listFiles { file ->
+                    file.isFile && file.name.endsWith(".so")
+                }
+                ?.map { it.absolutePath }
+                ?: emptyList()
+
+            result.success(libraries)
+        }
+
+        else -> result.notImplemented()
     }
+}
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
     }
 }
+
+
