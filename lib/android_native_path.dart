@@ -33,7 +33,7 @@ class AndroidNativePath {
         'getNativeLibrariesList',
       );
       return result.cast<String>();
-    } on PlatformException catch (e) {
+    } catch (_) {
       // print("Failed to get libraries: '${e.message}'.");
       return [];
     }
