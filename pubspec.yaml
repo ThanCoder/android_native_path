@@ -3,7 +3,7 @@ description: "Android Jni Native Lib Path Getter."
 version: 0.1.0
 
 repository: https://github.com/ThanCoder/android_native_path.git
-homepage:
+homepage: https://pub.dev/packages/android_native_path
 
 environment:
   sdk: ^3.13.5
