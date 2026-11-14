@@ -63,6 +63,12 @@ android {
             }
         }
     }
+    // for android_native_path
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
 }
 
 kotlin {
