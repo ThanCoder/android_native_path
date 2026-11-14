@@ -11,7 +11,7 @@ dependencies:
   android_native_path:
     path: ../
   cupertino_icons: ^2.0.0
-  dart_core_extensions: ^0.8.0
+  dart_core_extensions: ^0.9.0
   material_ui: ^1.11.0
 
 dev_dependencies:
